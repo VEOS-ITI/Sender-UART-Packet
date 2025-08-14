@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <cstdio>
-#include "Packet.hpp"   // Your Packet struct
+#include "Packet.h"   // Your Packet struct
 #include "CheckSum.h"   // Your CRC functions
 
 using namespace std;
@@ -55,12 +55,12 @@ int main() {
     }
 
     // ======== 3. Create Packet ========
-    array<uint8_t, 4> payload = {0x01, 0x5A, 0x01, 0x00};
+    array<uint8_t, 4> payload = {0x01, 0x50, 0x01, 0x00};
     Packet packet_to_send{};
 
     packet_to_send.start_packet = 0xAA55;
-    packet_to_send.packetID     = static_cast<uint8_t>(Motor_ID);
-    packet_to_send.count        = payload.size();
+    packet_to_send.packetID     = (uint8_t)(MotorAngle_ID);
+    packet_to_send.count        = 1;
     memcpy(packet_to_send.payload, payload.data(), payload.size());
 
     // Use your checksum() from CheckSum.h
