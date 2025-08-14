@@ -38,7 +38,7 @@ struct Motor {
 };
 struct MotorAngle {
     uint8_t ID;
-    uint8_t angle;
+    int16_t angle;
     uint8_t direction;
 };
 struct CarHorn {

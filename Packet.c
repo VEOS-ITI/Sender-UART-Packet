@@ -21,7 +21,27 @@ uint16_t FillData(const uint8_t payload[PAYLOAD_SIZE], PacketID packetID)
 
     return packet.checksum;
 }
+uint16_t FillData_MotorAngle(uint8_t id, int16_t angle, uint8_t direction) {
+    struct Packet packet;
+    packet.start_packet = 0xAA55;
+    packet.end_packet = 0x0D0A;
+    packet.count = 1;
+    packet.packetID = MotorAngle_ID;
 
+    packet.payload[0] = id;
+    packet.payload[1] = (uint8_t)(angle & 0xFF);
+    packet.payload[2] = (uint8_t)((angle >> 8) & 0xFF);
+    packet.payload[3] = direction;
+
+    uint8_t checksumData[6];
+    memcpy(checksumData, packet.payload, PAYLOAD_SIZE);
+    checksumData[4] = packet.packetID;
+    checksumData[5] = packet.count;
+
+    packet.checksum = checksum(checksumData, sizeof(checksumData));
+
+    return packet.checksum;
+}
 uint8_t SerializePacket(const struct Packet *packet)
 {
     if (!packet)
@@ -63,7 +83,7 @@ uint8_t SerializePacket(const struct Packet *packet)
     {
         struct MotorAngle motorAngle = {
             .ID = packet->payload[0],
-            .angle = packet->payload[1],
+            .angle = (int16_t)packet->payload[1],
             .direction = packet->payload[2]};
 
         printf("Encoder Data send:\r\n");
