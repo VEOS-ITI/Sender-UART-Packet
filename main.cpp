@@ -62,19 +62,24 @@ int main()
     }
 
     // ======== 3. Create Packet ========
-    // array<uint8_t, 4> payload = {0x01, -30, 0x01};
-    // int16_t angle = -30; // signed value
-    // array<uint8_t, 4> payload = {
-    //     0x01,                                      // Motor ID
-    //     static_cast<uint8_t>(angle & 0xFF),        // low byte
-    //     static_cast<uint8_t>((angle >> 8) & 0xFF), // high byte
-    //     0x01                                       // Direction
-    // };
-    array <uint8_t , 4> payload = {0x01 , 0x10 , 0x01, 0x00}; // Example payload for Motor
+
+    int16_t angle = 23; // signed value
+    array<uint8_t, 4> payload = {
+        0x01,                                      // Motor ID
+        static_cast<uint8_t>(angle & 0xFF),        // low byte
+        static_cast<uint8_t>((angle >> 8) & 0xFF), // high byte
+        0x01                                       // Direction
+    };
+    // scanf("led value(front : (on : 1, off :0), back : (on : 2, off :3) , right :(on :4 , off : 5),left : (on : 6, off:7) ) : %i",&lednum);
+    // array <uint8_t , 4> payload = {0x01 ,7, 0x00, 0x00}; // Example payload for Light
+    // array <uint8_t , 4> payload = {0x03 ,50, 0x01, 0x00}; // Example payload for Motor
+
+
     Packet packet_to_send{};
+    // packet_to_send.packetID = (uint8_t)(CarLight_ID);
+    packet_to_send.packetID = (uint8_t)(MotorAngle_ID);
 
     packet_to_send.start_packet = 0xAA55;
-    packet_to_send.packetID = (uint8_t)(Motor_ID);
     packet_to_send.count = 1;
     memcpy(packet_to_send.payload, payload.data(), payload.size());
 
